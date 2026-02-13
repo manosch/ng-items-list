@@ -1,34 +1,28 @@
-import { afterNextRender, Component, effect, ElementRef, inject, Signal, untracked, viewChild } from '@angular/core';
+import { Component, effect, inject, Signal, untracked } from '@angular/core';
 import { Router } from '@angular/router';
-import { fromEvent, debounceTime, distinctUntilChanged, map, filter } from 'rxjs';
+import { debounceTime, distinctUntilChanged, filter } from 'rxjs';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { CharactersFacade } from './characters-facade.js';
-import { MatGridListModule } from '@angular/material/grid-list';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { CharacterCard } from '../../../shared/components/character-card/character-card.js';
-import { InfiniteScrollDirective } from '../../../shared/directives/infinite-scroll.js';
-import { CharDTO } from '../../../api/models/response-dto';
+import { CharDTO } from '../../../api/models/response-dto.js';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { RestoreScrollPosition } from '../../../shared/directives/restore-scroll-position.js';
+import { CharactersList } from '../../../shared/components/characters-list/characters-list.js';
 
 @Component({
-  selector: 'app-character-list',
+  selector: 'app-characters',
   imports: [
-    MatGridListModule,
-    CharacterCard,
-    MatProgressSpinnerModule,
     ReactiveFormsModule,
-    InfiniteScrollDirective,
     MatFormFieldModule,
     MatInputModule,
-    RestoreScrollPosition
+    RestoreScrollPosition,
+    CharactersList
   ],
-  templateUrl: './character-list.html',
-  styleUrl: './character-list.scss'
+  templateUrl: './characters-page.html',
+  styleUrl: './characters-page.scss'
 })
-export class CharacterList {
+export class CharactersPage {
   private readonly router = inject(Router);
   private readonly fb = inject(FormBuilder);
 

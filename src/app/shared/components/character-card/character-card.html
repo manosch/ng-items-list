@@ -1,17 +1,12 @@
-<mat-card class="character-card" appearance="outlined">
+<mat-card class="character-card" appearance="outlined" (click)="onCardClick()">
   <mat-card-header class="character-header">
     <mat-card-subtitle>{{character().name}} </mat-card-subtitle>
-    <button mat-icon-button [matMenuTriggerFor]="menu">
+    <button mat-icon-button [matMenuTriggerFor]="menu" (click)="$event.stopPropagation()">
       <mat-icon>more_vert</mat-icon>
     </button>
   </mat-card-header>
-  <img
-    mat-card-image
-    class="character-image"
-    [ngSrc]="character().image"
-    [alt]="character().name"
-    width="300"
-    height="300">
+  <img mat-card-image class="character-image" [src]="character().image"
+    [alt]="character().name">
 </mat-card>
 
 <mat-menu #menu="matMenu">

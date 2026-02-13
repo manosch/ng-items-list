@@ -1,0 +1,15 @@
+<form class="search-form" [formGroup]="searchForm">
+  <mat-form-field class="search-input">
+    <mat-label>Search for a character</mat-label>
+    <input matInput formControlName="searchTerm" maxlength="256"
+      placeholder="Ex. Toxic Rick">
+  </mat-form-field>
+</form>
+
+<app-characters-list
+  restoreScrollPosition
+  [characters]="characters()"
+  [loading]="loading()"
+  (viewDetails)="viewCharacterDetails($event)"
+  (loadMore)="loadNextPage()"
+/>

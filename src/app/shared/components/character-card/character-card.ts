@@ -1,5 +1,4 @@
 import { Component, input, output } from '@angular/core';
-import { NgOptimizedImage } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -8,15 +7,20 @@ import { CharDTO } from '../../../api/models/response-dto';
 
 @Component({
   selector: 'app-character-card',
-  imports: [MatCardModule, MatButtonModule, MatIconModule, MatMenuModule, NgOptimizedImage],
+  imports: [MatCardModule, MatButtonModule, MatIconModule, MatMenuModule],
   templateUrl: './character-card.html',
   styleUrl: './character-card.scss',
 })
 export class CharacterCard {
   character = input.required<CharDTO>();
-  
+
+  viewDetails = output<CharDTO>();
   edit = output<CharDTO>();
   delete = output<CharDTO>();
+
+  onCardClick() {
+    this.viewDetails.emit(this.character());
+  }
 
   onEdit() {
     this.edit.emit(this.character());

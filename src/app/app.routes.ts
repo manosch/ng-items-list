@@ -3,7 +3,7 @@ import { Routes } from '@angular/router';
 export const routes: Routes = [
   {
     path: 'characters',
-    loadComponent: async () => (await import('./feature/characters/character-list/character-list')).CharacterList
+    loadComponent: async () => (await import('./feature/characters/characters-page/characters-page')).CharactersPage
   },
   {
     path: 'characters/:id',
