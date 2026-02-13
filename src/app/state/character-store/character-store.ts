@@ -9,36 +9,33 @@ import { CharacterApi } from '../../api/services/character-api.ts';
 
 
 type CharactersState = {
-  characters: CharDTO[];
-  currentPage: number;
+  characterInfo: CharDTO | null;
   loading: boolean;
 }
 
 const initialState: CharactersState = {
-  characters: [],
-  currentPage: 1,
+  characterInfo: null,
   loading: false
 }
 
-export const CharactersStore = signalStore(
+export const CharacterStore = signalStore(
   withState(initialState),
   withProps(() => ({
     api: inject(CharacterApi)
   })),
   withMethods(({ api, ...store }) => ({
-    fetchCharacters: rxMethod(
+    fetchCharacter: rxMethod<{ id: number }>(
       pipe(
-        switchMap(() => {
+        switchMap(({ id }) => {
           patchState(store, { loading: true })
-          return api.fetchCharacters(store.currentPage()).pipe(
+          return api.getCharacter(id).pipe(
             catchError(err => {
               patchState(store, { loading: false });
               return [];
             }),
             tap(response => {
               patchState(store, {
-                characters: [...store.characters(), ...response.results],
-                currentPage: store.currentPage(),
+                characterInfo: response,
                 loading: false
               })
             })
@@ -46,8 +43,5 @@ export const CharactersStore = signalStore(
         })
       )
     ),
-    setCurrentPage: (page: number) => {
-      patchState(store, { currentPage: page });
-    },
   }))
 )
