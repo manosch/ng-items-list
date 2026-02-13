@@ -4,35 +4,27 @@
 }
 
 .character-card {
+  width: fit-content;
   height: 100%;
   display: flex;
   flex-direction: column;
 }
 
 .character-header {
-  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+
+.status--alive {
+  color: rgb(72, 185, 72);
+}
+
+.status--dead {
+  color: rgb(227, 89, 112);
 }
 
 .character-image {
-  width: 100%;
-  margin: 0;
-}
-
-.character-content {
-  flex-grow: 1;
-  display: flex;
-  flex-direction: column;
-  text-align: center;
-
-  .status--alive {
-    color: rgb(72, 185, 72);
-  }
-
-  .status--dead {
-    color: rgb(227, 89, 112);
-  }
-}
-
-.character-actions {
-  flex-shrink: 0;
+  overflow: hidden;
 }
