@@ -1,6 +1,26 @@
-<mat-grid-list cols="3">
+<mat-grid-list cols="4" [gutterSize]="'12px'">
   @for(character of characters(); track character.id) {
     <mat-grid-tile><app-character-card class="char-item" [character]="character" />
   </mat-grid-tile>
   }
 </mat-grid-list>
+
+@if(characters().length === 0 && !loading()) {
+  <div class="no-results">
+    <p>No characters found.</p>
+  </div>
+}
+@if (characters().length >0) {
+
+  <div
+  class="scroll-sentinel"
+  appInfiniteScroll
+  (intersected)="loadNextPage()"
+  [disabled]="loading()"
+  ></div>
+}
+@if (loading()) {
+  <div class="loading-indicator">
+    <mat-spinner />
+  </div>
+}

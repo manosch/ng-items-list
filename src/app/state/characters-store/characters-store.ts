@@ -34,7 +34,7 @@ export const CharactersStore = signalStore(
             tap(response => {
               patchState(store, {
                 characters: [...store.characters(), ...response.results],
-                currentPage: store.currentPage() + 1,
+                currentPage: store.currentPage(),
                 loading: false
               })
             })
@@ -44,10 +44,6 @@ export const CharactersStore = signalStore(
     ),
     setCurrentPage: (page: number) => {
       patchState(store, { currentPage: page });
-    },
-    nextPage: () => {
-      const current = store.currentPage();
-      patchState(store, { currentPage: current + 1 });
     },
   }))
 )
