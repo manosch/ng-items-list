@@ -5,7 +5,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatChipsModule } from '@angular/material/chips';
 import { CharacterDetailFacade } from './character-detail-facade.js';
-import { CharacterStore } from '../../../state/character-store/character-store.js';
+import { CharacterStore } from '../../../core/state/character-store/character-store.js';
 
 @Component({
   selector: 'app-character-detail',

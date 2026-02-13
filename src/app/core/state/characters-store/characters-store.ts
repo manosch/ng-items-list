@@ -4,9 +4,9 @@ import { computed } from '@angular/core';
 import { inject } from '@angular/core';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { pipe, switchMap, filter, tap, catchError } from 'rxjs';
-import { CharDTO } from '../../api/models/response-dto';
-import { CharacterApi } from '../../api/services/character-api.ts';
-import { RequestParams } from '../../api/models/request-params';
+import { CharDTO } from '../../../api/models/response-dto';
+import { CharacterApi } from '../../../api/services/character-api.ts';
+import { RequestParams } from '../../../api/models/request-params';
 
 
 type CharactersState = {
@@ -24,6 +24,7 @@ const initialState: CharactersState = {
 }
 
 export const CharactersStore = signalStore(
+  { providedIn: 'root' },
   withState(initialState),
   withProps(() => ({
     api: inject(CharacterApi)

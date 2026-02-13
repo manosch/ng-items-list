@@ -4,8 +4,8 @@ import { computed } from '@angular/core';
 import { inject } from '@angular/core';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { pipe, switchMap, filter, tap, catchError } from 'rxjs';
-import { CharDTO } from '../../api/models/response-dto';
-import { CharacterApi } from '../../api/services/character-api.ts';
+import { CharDTO } from '../../../api/models/response-dto';
+import { CharacterApi } from '../../../api/services/character-api.ts';
 
 
 type CharactersState = {

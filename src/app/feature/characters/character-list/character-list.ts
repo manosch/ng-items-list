@@ -3,7 +3,6 @@ import { Router } from '@angular/router';
 import { fromEvent, debounceTime, distinctUntilChanged, map, filter } from 'rxjs';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { CharactersFacade } from './characters-facade.js';
-import { CharactersStore } from '../../../state/characters-store/characters-store.js';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -12,13 +11,22 @@ import { CharacterCard } from '../../../shared/components/character-card/charact
 import { InfiniteScrollDirective } from '../../../shared/directives/infinite-scroll.js';
 import { CharDTO } from '../../../api/models/response-dto';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
+import { RestoreScrollPosition } from '../../../shared/directives/restore-scroll-position.js';
 
 @Component({
   selector: 'app-character-list',
-  imports: [MatGridListModule, CharacterCard, MatProgressSpinnerModule, ReactiveFormsModule, InfiniteScrollDirective, MatFormFieldModule, MatInputModule],
+  imports: [
+    MatGridListModule,
+    CharacterCard,
+    MatProgressSpinnerModule,
+    ReactiveFormsModule,
+    InfiniteScrollDirective,
+    MatFormFieldModule,
+    MatInputModule,
+    RestoreScrollPosition
+  ],
   templateUrl: './character-list.html',
-  styleUrl: './character-list.scss',
-  providers: [CharactersFacade, CharactersStore]
+  styleUrl: './character-list.scss'
 })
 export class CharacterList {
   private readonly router = inject(Router);
@@ -33,19 +41,33 @@ export class CharacterList {
     searchTerm: ''
   });
   searchTerm!: Signal<string>;
+  isInitialLoad = false;
 
   constructor() {
     this.searchTerm = toSignal(
       this.searchForm.controls.searchTerm.valueChanges
         .pipe(
           distinctUntilChanged(),
-          filter(term => term.trim().length === 0 || term.trim().length > 2),
+          filter(term =>
+            term.trim().length === 0 || term.trim().length > 2
+          ),
           debounceTime(300),
-        ), { initialValue: '' });
+        ), { initialValue: '' }
+      );
+
+    // Initial load: only load if state is empty
+    if (this.characters().length === 0) {
+      this.loadCharacters();
+    }
 
     effect(() => {
       this.searchTerm();
-      untracked(() => this.reloadCharacters());
+      untracked(() => {
+        if (this.isInitialLoad) {
+          this.reloadCharacters();
+        }
+      });
+      this.isInitialLoad = true;
     });
   }
 
@@ -60,13 +82,13 @@ export class CharacterList {
   }
 
   loadNextPage() {
-    if(this.canLoadMore()) {
+    if (this.canLoadMore()) {
       this.charactersFacade.setNextPage();
       this.loadCharacters();
     }
   }
 
   viewCharacterDetails(character: CharDTO) {
-    this.router.navigate(['/', character.id]);
+    this.router.navigate(['/characters', character.id]);
   }
 }

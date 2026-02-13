@@ -1,5 +1,5 @@
 import { inject, Injectable } from '@angular/core';
-import { CharactersStore } from '../../../state/characters-store/characters-store';
+import { CharactersStore } from '../../../core/state/characters-store/characters-store';
 import { RequestParams } from '../../../api/models/request-params';
 
 @Injectable({
@@ -11,7 +11,7 @@ export class CharactersFacade {
   charactersList = this.charactersStore.characters;
   loading = this.charactersStore.loading;
   canLoadMore = this.charactersStore.hasMorePages;
-  
+
   loadCharacters(params: Omit<RequestParams, 'page'>) {
     this.charactersStore.fetchCharacters(params);
   }
