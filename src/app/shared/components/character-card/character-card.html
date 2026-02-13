@@ -1,0 +1,25 @@
+<mat-card class="character-card" appearance="outlined">
+  <mat-card-header class="character-header">
+    <div mat-card-avatar class="character-avatar"></div>
+    <mat-card-title>{{character().name}}</mat-card-title>
+    <mat-card-subtitle>{{character().species}}</mat-card-subtitle>
+  </mat-card-header>
+  <img
+    mat-card-image
+    class="character-image"
+    [ngSrc]="character().image"
+    [alt]="character().name"
+    width="300"
+    height="300">
+  <mat-card-content class="character-content">
+    <span [class.status--alive]="character().status === 'Alive'"
+      [class.status--dead]="character().status === 'Dead'">
+      {{character().status}}
+    </span>
+
+  </mat-card-content>
+  <mat-card-actions class="character-actions">
+    <button matButton>Edit</button>
+    <button matButton>Delete</button>
+  </mat-card-actions>
+</mat-card>
