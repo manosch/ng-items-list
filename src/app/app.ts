@@ -20,6 +20,4 @@ import { MatBadgeModule } from '@angular/material/badge';
   styleUrl: './app.scss'
 })
 export class App {
-  // Favorites count will be injected from FavoritesStore later
-  protected readonly favoritesCount = 0;
 }

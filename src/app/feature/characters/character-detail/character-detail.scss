@@ -1,0 +1,42 @@
+:host {
+  display: flex;
+  justify-content: center;
+}
+
+.detail-container {
+  display: flex;
+  gap: 16px;
+  flex-direction: column;
+
+  .details-header {
+    display: flex;
+    align-items: center;
+  }
+
+  .details-info {
+    display: flex;
+    gap: 3rem;
+
+    .status {
+      display: flex;
+      align-items: center;
+
+      .status--alive {
+        color: rgb(72, 185, 72);
+      }
+
+      .status--dead {
+        color: rgb(227, 89, 112);
+      }
+    }
+
+    .info-sections {
+      .info-section {
+        .info-value {
+          display: flex;
+          align-items: center;
+        }
+      }
+    }
+  }
+}

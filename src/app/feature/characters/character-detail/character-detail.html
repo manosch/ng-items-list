@@ -1,1 +1,69 @@
-<p>character-detail works!</p>
+@if (character(); as char) {
+<div class="detail-container">
+  <div class="details-header">
+    <button mat-icon-button (click)="goBack()">
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+    <span>{{ char.name }}</span>
+  </div>
+  <div class="details-info">
+    <div class="detail-image">
+      <img [src]="char.image" [alt]="char.name">
+    </div>
+    <div class="info-sections">
+      <div class="info-section">
+        <h4>Status</h4>
+        <div class="info-value status">
+
+          @if (char.status === 'Alive') {
+            <mat-icon>favorite</mat-icon>
+          } @else if (char.status === 'Dead') {
+            <mat-icon>heart_broken</mat-icon>
+          } @else {
+            <mat-icon>help</mat-icon>
+          }
+          <span [class.status--alive]="char.status === 'Alive'"
+                [class.status--dead]="char.status === 'Dead'"
+                [class.status--unknown]="char.status === 'unknown'">
+            {{ char.status }}
+          </span>
+        </div>
+      </div>
+
+      <div class="info-section">
+        <h4>Species</h4>
+        <p class="info-value">{{ char.species }}</p>
+        @if (char.type) {
+        <p class="info-subtitle">Type: {{ char.type }}</p>
+        }
+      </div>
+
+      <div class="info-section">
+        <h4>Gender</h4>
+        <p class="info-value">{{ char.gender }}</p>
+      </div>
+
+      <div class="info-section">
+        <h4>Origin</h4>
+        <p class="info-value">
+          <mat-icon class="info-icon">public</mat-icon>
+          {{ char.origin.name }}
+        </p>
+      </div>
+
+      <div class="info-section">
+        <h4>Current Location</h4>
+        <p class="info-value">
+          <mat-icon class="info-icon">location_on</mat-icon>
+          {{ char.location.name }}
+        </p>
+      </div>
+
+      <div class="info-section">
+        <h4>Episodes</h4>
+        <span>{{ char.episode.length }} Episodes</span>
+      </div>
+    </div>
+  </div>
+</div>
+}

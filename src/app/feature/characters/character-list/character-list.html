@@ -1,7 +1,11 @@
 <mat-grid-list cols="4" [gutterSize]="'12px'">
   @for(character of characters(); track character.id) {
-    <mat-grid-tile><app-character-card class="char-item" [character]="character" />
-  </mat-grid-tile>
+    <mat-grid-tile>
+      <app-character-card
+        class="char-item"
+        [character]="character"
+        (viewDetails)="viewCharacterDetails($event)" />
+    </mat-grid-tile>
   }
 </mat-grid-list>
 
