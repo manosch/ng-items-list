@@ -4,8 +4,8 @@ import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatChipsModule } from '@angular/material/chips';
-import { CharacterDetailFacade } from './character-detail-facade.js';
-import { CharacterStore } from '../../../core/state/character-store/character-store.js';
+import { CharacterDetailFacade } from './character-detail-facade';
+import { CharacterStore } from '../../../core/state/character-store/character-store';
 
 @Component({
   selector: 'app-character-detail',

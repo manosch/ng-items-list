@@ -79,6 +79,10 @@ export class CharactersPage {
     this.charactersFacade.addToFavorites(character);
   }
 
+  deleteCharacter(character: CharDTO) {
+    this.charactersFacade.deleteCharacter(character);
+  }
+
   loadNextPage() {
     if (this.canLoadMore()) {
       this.charactersFacade.setNextPage();

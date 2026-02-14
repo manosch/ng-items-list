@@ -17,9 +17,14 @@ export class CharacterCard {
   viewDetails = output<CharDTO>();
   edit = output<CharDTO>();
   delete = output<CharDTO>();
+  addToFavorites = output<CharDTO>();
 
   onCardClick() {
     this.viewDetails.emit(this.character());
+  }
+
+  onAddToFavorites() {
+    this.addToFavorites.emit(this.character());
   }
 
   onEdit() {

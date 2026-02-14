@@ -8,8 +8,7 @@ import { CharDTO } from '../../../api/models/response-dto';
 import { CharacterApi } from '../../../api/services/character-api.ts';
 import { RequestParams } from '../../../api/models/request-params';
 import { LocalStorageService } from '../../services/local-storage.service';
-
-const FAVORITES_STORAGE_KEY = 'favorite-characters';
+import { FAVORITES_STORAGE_KEY } from '../../../feature/characters/constants';
 
 type CharactersState = {
   characters: CharDTO[];
@@ -70,8 +69,19 @@ export const CharactersStore = signalStore(
       const updatedFavorites = [...store.favoriteCharacters(), character];
       patchState(store, { favoriteCharacters: updatedFavorites });
     },
+    removeFromFavorites: (character: CharDTO) => {
+      if(!store.favoriteCharacters().some(c => c.id === character.id)) {
+        return;
+      }
+      const updatedFavorites = store.favoriteCharacters().filter(c => c.id !== character.id);
+      patchState(store, { favoriteCharacters: updatedFavorites });
+    },
     setCurrentPage: (page: number) => {
       patchState(store, { currentPage: page });
+    },
+    deleteCharacter: (character: CharDTO) => {
+      const updatedCharacters = store.characters().filter(c => c.id !== character.id);
+      patchState(store, { characters: updatedCharacters });
     },
     resetList: () => {
       patchState(store, {

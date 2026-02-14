@@ -18,6 +18,7 @@ export class CharactersList {
   viewDetails = output<CharDTO>();
   loadMore = output<void>();
   addToFavorites = output<CharDTO>();
+  deleteCharacter = output<CharDTO>();
 
   onViewDetails(character: CharDTO) {
     this.viewDetails.emit(character);
@@ -25,6 +26,10 @@ export class CharactersList {
 
   onAddToFavorites(character: CharDTO) {
     this.addToFavorites.emit(character);
+  }
+
+  onDelete(character: CharDTO) {
+    this.deleteCharacter.emit(character);
   }
 
   onLoadMore() {
