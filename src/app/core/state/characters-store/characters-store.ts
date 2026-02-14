@@ -11,6 +11,7 @@ import { RequestParams } from '../../../api/models/request-params';
 
 type CharactersState = {
   characters: CharDTO[];
+  favoriteCharacters: CharDTO[];
   currentPage: number;
   hasMorePages: boolean;
   loading: boolean;
@@ -18,6 +19,7 @@ type CharactersState = {
 
 const initialState: CharactersState = {
   characters: [],
+  favoriteCharacters: [],
   currentPage: 1,
   hasMorePages: true,
   loading: false
@@ -57,6 +59,10 @@ export const CharactersStore = signalStore(
         })
       )
     ),
+    addToFavorites: (character: CharDTO) => {
+      const updatedFavorites = [...store.favoriteCharacters(), character];
+      patchState(store, { favoriteCharacters: updatedFavorites });
+    },
     setCurrentPage: (page: number) => {
       patchState(store, { currentPage: page });
     },

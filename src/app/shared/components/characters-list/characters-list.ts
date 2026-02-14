@@ -1,9 +1,9 @@
 import { Component, input, output } from '@angular/core';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { CharacterCard } from '../character-card/character-card.js';
-import { InfiniteScrollDirective } from '../../directives/infinite-scroll.js';
-import { CharDTO } from '../../../api/models/response-dto.js';
+import { CharacterCard } from '../character-card/character-card';
+import { InfiniteScrollDirective } from '../../directives/infinite-scroll';
+import { CharDTO } from '../../../api/models/response-dto';
 
 @Component({
   selector: 'app-characters-list',
@@ -13,13 +13,18 @@ import { CharDTO } from '../../../api/models/response-dto.js';
 })
 export class CharactersList {
   characters = input.required<CharDTO[]>();
-  loading = input.required<boolean>();
+  loading = input<boolean>(false);
 
   viewDetails = output<CharDTO>();
   loadMore = output<void>();
+  addToFavorites = output<CharDTO>();
 
   onViewDetails(character: CharDTO) {
     this.viewDetails.emit(character);
+  }
+
+  onAddToFavorites(character: CharDTO) {
+    this.addToFavorites.emit(character);
   }
 
   onLoadMore() {

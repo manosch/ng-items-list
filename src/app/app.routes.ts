@@ -10,6 +10,10 @@ export const routes: Routes = [
     loadComponent: async () => (await (import('./feature/characters/character-detail/character-detail'))).CharacterDetail,
   },
   {
+    path: 'favorites',
+    loadComponent: async () => (await (import('./feature/characters/favorite-characters-page/favorite-characters-page'))).FavoriteCharactersPage,
+  },
+  {
     path: '**',
     redirectTo: 'characters',
     pathMatch: 'full'

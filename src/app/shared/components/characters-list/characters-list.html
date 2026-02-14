@@ -5,6 +5,7 @@
         <app-character-card
           class="char-item"
           [character]="character"
+          (addToFavorites)="onAddToFavorites($event)"
           (viewDetails)="onViewDetails($event)" />
       </mat-grid-tile>
     }
