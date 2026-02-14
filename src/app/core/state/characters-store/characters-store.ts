@@ -1,14 +1,14 @@
 
-import { patchState, signalStore, withComputed, withHooks, withMethods, withProps, withState } from '@ngrx/signals';
+import { patchState, signalStore, withHooks, withMethods, withProps, withState } from '@ngrx/signals';
 import { computed } from '@angular/core';
 import { inject } from '@angular/core';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
-import { pipe, switchMap, filter, tap, catchError } from 'rxjs';
+import { pipe, switchMap, filter, tap, catchError, map } from 'rxjs';
 import { CharDTO } from '../../../api/models/response-dto';
 import { CharacterApi } from '../../../api/services/character-api.ts';
 import { RequestParams } from '../../../api/models/request-params';
 import { LocalStorageService } from '../../services/local-storage.service';
-import { FAVORITES_STORAGE_KEY } from '../../../feature/characters/constants';
+import { DELETED_STORAGE_KEY, FAVORITES_STORAGE_KEY } from '../../../feature/characters/constants';
 
 type CharactersState = {
   characters: CharDTO[];
@@ -49,6 +49,13 @@ export const CharactersStore = signalStore(
               patchState(store, { loading: false });
               return [];
             }),
+            map(response => {
+              const deletedIds = localStorage.getItem<CharDTO[]>(DELETED_STORAGE_KEY)?.map(c => c.id) ?? [];
+              return {
+                ...response,
+                results: response.results.filter(char => !deletedIds.includes(char.id))
+              };
+            }),
             tap(response => {
               const newCharacters = [...store.characters(), ...response.results];
               patchState(store, {
@@ -83,7 +90,7 @@ export const CharactersStore = signalStore(
     },
     deleteCharacter: (character: CharDTO) => {
       const updatedCharacters = store.characters().filter(c => c.id !== character.id);
-      patchState(store, { characters: updatedCharacters });
+      patchState(store, {characters: updatedCharacters });
     },
     resetList: () => {
       patchState(store, {
