@@ -64,6 +64,9 @@ export const CharactersStore = signalStore(
       )
     ),
     addToFavorites: (character: CharDTO) => {
+      if(store.favoriteCharacters().some(c => c.id === character.id)) {
+        return;
+      }
       const updatedFavorites = [...store.favoriteCharacters(), character];
       patchState(store, { favoriteCharacters: updatedFavorites });
     },
