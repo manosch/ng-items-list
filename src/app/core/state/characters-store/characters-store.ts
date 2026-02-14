@@ -63,17 +63,19 @@ export const CharactersStore = signalStore(
       )
     ),
     addToFavorites: (character: CharDTO) => {
-      if(store.favoriteCharacters().some(c => c.id === character.id)) {
+      const existingFavorites = store.favoriteCharacters();
+      if(existingFavorites.some(c => c.id === character.id)) {
         return;
       }
-      const updatedFavorites = [...store.favoriteCharacters(), character];
+      const updatedFavorites = [...existingFavorites, character];
       patchState(store, { favoriteCharacters: updatedFavorites });
     },
     removeFromFavorites: (character: CharDTO) => {
-      if(!store.favoriteCharacters().some(c => c.id === character.id)) {
+      const existingFavorites = store.favoriteCharacters();
+      if(!existingFavorites.some(c => c.id === character.id)) {
         return;
       }
-      const updatedFavorites = store.favoriteCharacters().filter(c => c.id !== character.id);
+      const updatedFavorites = existingFavorites.filter(c => c.id !== character.id);
       patchState(store, { favoriteCharacters: updatedFavorites });
     },
     setCurrentPage: (page: number) => {
