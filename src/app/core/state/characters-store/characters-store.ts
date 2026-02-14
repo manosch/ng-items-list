@@ -7,7 +7,9 @@ import { pipe, switchMap, filter, tap, catchError } from 'rxjs';
 import { CharDTO } from '../../../api/models/response-dto';
 import { CharacterApi } from '../../../api/services/character-api.ts';
 import { RequestParams } from '../../../api/models/request-params';
+import { LocalStorageService } from '../../services/local-storage.service';
 
+const FAVORITES_STORAGE_KEY = 'favorite-characters';
 
 type CharactersState = {
   characters: CharDTO[];
@@ -29,9 +31,11 @@ export const CharactersStore = signalStore(
   { providedIn: 'root' },
   withState(initialState),
   withProps(() => ({
-    api: inject(CharacterApi)
+    api: inject(CharacterApi),
+    localStorage: inject(LocalStorageService)
   })),
-  withMethods(({ api, ...store }) => ({
+
+  withMethods(({ api, localStorage, ...store }) => ({
     fetchCharacters: rxMethod<Omit<RequestParams, 'page'>>(
       pipe(
         filter(() => store.hasMorePages()),
@@ -74,5 +78,13 @@ export const CharactersStore = signalStore(
         loading: false
       });
     }
-  }))
+  })),
+  withHooks({
+    onInit({ localStorage, ...store }) {
+      const storedFavorites = localStorage.getItem<CharDTO[]>(FAVORITES_STORAGE_KEY);
+      if (storedFavorites && storedFavorites.length > 0) {
+        patchState(store, { favoriteCharacters: storedFavorites });
+      }
+    }
+  })
 )
