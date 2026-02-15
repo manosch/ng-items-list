@@ -1,0 +1,22 @@
+<h2 mat-dialog-title class="form-title">{{data.name}}</h2>
+<mat-dialog-content >
+  <form [formGroup]="characterForm" class="character-form">
+    <mat-form-field>
+      <mat-label>Name</mat-label>
+      <input matInput formControlName="name" />
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Status</mat-label>
+      <mat-select formControlName="status">
+        <mat-option value="Alive">Alive</mat-option>
+        <mat-option value="Dead">Dead</mat-option>
+        <mat-option value="Unknown">Unknown</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button matButton (click)="onCancel()">Cancel</button>
+  <button matButton [mat-dialog-close]="characterForm.value" cdkFocusInitial
+    [disabled]="characterForm.invalid">Ok</button>
+</mat-dialog-actions>

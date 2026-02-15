@@ -1,4 +1,4 @@
-import { Component, input, output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -10,6 +10,7 @@ import { CharDTO } from '../../../api/models/response-dto';
   imports: [MatCardModule, MatButtonModule, MatIconModule, MatMenuModule],
   templateUrl: './character-card.html',
   styleUrl: './character-card.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CharacterCard {
   character = input.required<CharDTO>();

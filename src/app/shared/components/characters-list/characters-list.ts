@@ -1,4 +1,4 @@
-import { Component, input, output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { CharacterCard } from '../character-card/character-card';
@@ -10,6 +10,7 @@ import { CharDTO } from '../../../api/models/response-dto';
   imports: [MatGridListModule, MatProgressSpinnerModule, CharacterCard, InfiniteScrollDirective],
   templateUrl: './characters-list.html',
   styleUrl: './characters-list.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CharactersList {
   characters = input.required<CharDTO[]>();
@@ -19,6 +20,7 @@ export class CharactersList {
   loadMore = output<void>();
   addToFavorites = output<CharDTO>();
   deleteCharacter = output<CharDTO>();
+  editCharacter = output<CharDTO>();
 
   onViewDetails(character: CharDTO) {
     this.viewDetails.emit(character);
@@ -26,6 +28,10 @@ export class CharactersList {
 
   onAddToFavorites(character: CharDTO) {
     this.addToFavorites.emit(character);
+  }
+
+  onEditChar(character: CharDTO) {
+    this.editCharacter.emit(character);
   }
 
   onDelete(character: CharDTO) {

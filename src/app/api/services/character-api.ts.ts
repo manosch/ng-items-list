@@ -18,8 +18,4 @@ export class CharacterApi {
     }
     return this.http.get<ResponseDTO>(this.baseUrl, { params: httpParams });
   }
-
-  getCharacter(id: number): Observable<CharDTO> {
-    return this.http.get<CharDTO>(`${this.baseUrl}/${id}`);
-  }
 }

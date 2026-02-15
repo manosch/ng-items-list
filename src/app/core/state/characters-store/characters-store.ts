@@ -8,7 +8,7 @@ import { CharDTO } from '../../../api/models/response-dto';
 import { CharacterApi } from '../../../api/services/character-api.ts';
 import { RequestParams } from '../../../api/models/request-params';
 import { LocalStorageService } from '../../services/local-storage.service';
-import { DELETED_STORAGE_KEY, FAVORITES_STORAGE_KEY } from '../../../feature/characters/constants';
+import { DELETED_STORAGE_KEY, FAVORITES_STORAGE_KEY, UPDATED_STORAGE_KEY } from '../../../feature/characters/constants';
 
 type CharactersState = {
   characters: CharDTO[];
@@ -50,10 +50,16 @@ export const CharactersStore = signalStore(
               return [];
             }),
             map(response => {
-              const deletedIds = localStorage.getItem<CharDTO[]>(DELETED_STORAGE_KEY)?.map(c => c.id) ?? [];
+              const deletedIds = localStorage.getItem<number[]>(DELETED_STORAGE_KEY) ?? [];
+              const updatedChars = localStorage.getItem<CharDTO[]>(UPDATED_STORAGE_KEY) ?? [];
               return {
                 ...response,
-                results: response.results.filter(char => !deletedIds.includes(char.id))
+                results: response.results
+                  .filter(char => !deletedIds.includes(char.id))
+                  .map(char => {
+                    const updated = updatedChars.find(u => u.id === char.id);
+                    return updated ? { ...char, ...updated } : char;
+                  })
               };
             }),
             tap(response => {
@@ -77,12 +83,23 @@ export const CharactersStore = signalStore(
       const updatedFavorites = [...existingFavorites, character];
       patchState(store, { favoriteCharacters: updatedFavorites });
     },
-    removeFromFavorites: (character: CharDTO) => {
+    updateCharacter: (partialCharacter: CharDTO) => {
+      const updatedCharacters = store.characters()
+        .map(char => char.id === partialCharacter.id ?
+          { ...char, ...partialCharacter } : char
+        );
+      const updatedFavorites = store.favoriteCharacters()
+        .map(char => char.id === partialCharacter.id ?
+          { ...char, ...partialCharacter } : char
+        );
+      patchState(store, { characters: updatedCharacters, favoriteCharacters: updatedFavorites });
+    },
+    removeFromFavorites: (characterId: number) => {
       const existingFavorites = store.favoriteCharacters();
-      if(!existingFavorites.some(c => c.id === character.id)) {
+      if(!existingFavorites.some(c => c.id === characterId)) {
         return;
       }
-      const updatedFavorites = existingFavorites.filter(c => c.id !== character.id);
+      const updatedFavorites = existingFavorites.filter(c => c.id !== characterId);
       patchState(store, { favoriteCharacters: updatedFavorites });
     },
     setCurrentPage: (page: number) => {
@@ -90,7 +107,7 @@ export const CharactersStore = signalStore(
     },
     deleteCharacter: (character: CharDTO) => {
       const updatedCharacters = store.characters().filter(c => c.id !== character.id);
-      patchState(store, {characters: updatedCharacters });
+      patchState(store, { characters: updatedCharacters });
     },
     resetList: () => {
       patchState(store, {

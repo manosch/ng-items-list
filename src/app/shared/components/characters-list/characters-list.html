@@ -6,6 +6,7 @@
           class="char-item"
           [character]="character"
           (addToFavorites)="onAddToFavorites($event)"
+          (edit)="onEditChar($event)"
           (delete)="onDelete($event)"
           (viewDetails)="onViewDetails($event)" />
       </mat-grid-tile>
