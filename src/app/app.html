@@ -1,5 +1,5 @@
-<mat-toolbar color="primary" class="app-toolbar">
-  <div class="toolbar-content">
+<mat-toolbar color="primary" class="app-navbar">
+  <div class="navbar-content">
     <a routerLink="/" class="app-title">
       <mat-icon>science</mat-icon>
       <span>Rick & Morty Characters</span>
@@ -9,8 +9,6 @@
       <a
         mat-button
         routerLink="/"
-        routerLinkActive="active-link"
-        [routerLinkActiveOptions]="{ exact: true }"
       >
         <mat-icon>person</mat-icon>
         <span>Characters</span>
@@ -18,8 +16,8 @@
       <a
         mat-button
         routerLink="/favorites"
-        routerLinkActive="active-link"
       >
+      <mat-icon>favorite</mat-icon>
         <span>Favorites</span>
       </a>
     </nav>

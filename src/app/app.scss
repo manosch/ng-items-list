@@ -1,24 +1,20 @@
-.app-toolbar {
+.app-navbar {
   position: sticky;
   top: 0;
   z-index: 1000;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 
-  .toolbar-content {
-    max-width: 1400px;
+  .navbar-content {
     width: 100%;
-    margin: 0 auto;
     display: flex;
-    justify-content: space-between;
+    justify-content: space-around;
     align-items: center;
-    gap: 1rem;
   }
 
   .app-title {
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    text-decoration: none;
     color: inherit;
     font-size: 1.25rem;
     font-weight: 500;
@@ -27,12 +23,6 @@
     &:hover {
       opacity: 0.8;
     }
-
-    mat-icon {
-      font-size: 1.5rem;
-      width: 1.5rem;
-      height: 1.5rem;
-    }
   }
 
   .nav-links {
@@ -40,44 +30,17 @@
     gap: 0.5rem;
 
     a {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-
       mat-icon {
         margin-right: 0.25rem;
       }
     }
 
-    .active-link {
-      background-color: rgba(255, 255, 255, 0.1);
-    }
   }
 }
 
 .app-content {
-  max-width: 1400px;
+  max-width: 80rem;
   width: 100%;
   margin: 0 auto;
   padding: 2rem 1rem;
-  min-height: calc(100vh - 64px);
-}
-
-@media (max-width: 768px) {
-  .app-toolbar {
-    .toolbar-content {
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 0.5rem;
-    }
-
-    .nav-links {
-      width: 100%;
-      justify-content: flex-start;
-    }
-  }
-
-  .app-content {
-    padding: 1rem 0.5rem;
-  }
 }

@@ -1,6 +1,6 @@
 
 import { patchState, signalStore, withHooks, withMethods, withProps, withState } from '@ngrx/signals';
-import { computed } from '@angular/core';
+import { effect, signal, untracked } from '@angular/core';
 import { inject } from '@angular/core';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { pipe, switchMap, filter, tap, catchError, map } from 'rxjs';
@@ -77,7 +77,7 @@ export const CharactersStore = signalStore(
     ),
     addToFavorites: (character: CharDTO) => {
       const existingFavorites = store.favoriteCharacters();
-      if(existingFavorites.some(c => c.id === character.id)) {
+      if (existingFavorites.some(c => c.id === character.id)) {
         return;
       }
       const updatedFavorites = [...existingFavorites, character];
@@ -96,7 +96,7 @@ export const CharactersStore = signalStore(
     },
     removeFromFavorites: (characterId: number) => {
       const existingFavorites = store.favoriteCharacters();
-      if(!existingFavorites.some(c => c.id === characterId)) {
+      if (!existingFavorites.some(c => c.id === characterId)) {
         return;
       }
       const updatedFavorites = existingFavorites.filter(c => c.id !== characterId);
@@ -120,10 +120,20 @@ export const CharactersStore = signalStore(
   })),
   withHooks({
     onInit({ localStorage, ...store }) {
-      const storedFavorites = localStorage.getItem<CharDTO[]>(FAVORITES_STORAGE_KEY);
-      if (storedFavorites && storedFavorites.length > 0) {
+      const isInitialized = signal(false);
+
+      const storedFavorites = localStorage.getItem<CharDTO[]>(FAVORITES_STORAGE_KEY) ?? [];
+      if (storedFavorites.length) {
         patchState(store, { favoriteCharacters: storedFavorites });
       }
+      isInitialized.set(true);
+
+      effect(() => {
+        if (!isInitialized()) return;
+
+        const favorites = store.favoriteCharacters();
+        untracked(() => localStorage.setItem(FAVORITES_STORAGE_KEY, structuredClone(favorites)));
+      });
     }
   })
 )

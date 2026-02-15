@@ -2,16 +2,16 @@ import { inject, Injectable } from '@angular/core';
 import { CharactersStore } from '../../core/state/characters-store/characters-store';
 import { RequestParams } from '../../api/models/request-params';
 import { CharDTO } from '../../api/models/response-dto';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { LocalStorageService } from '../../core/services/local-storage.service';
-import { DELETED_STORAGE_KEY, FAVORITES_STORAGE_KEY, UPDATED_STORAGE_KEY } from './constants';
+import { DELETED_STORAGE_KEY, UPDATED_STORAGE_KEY } from './constants';
+import { NotificationUtils } from '../../shared/services/notification-utils';
 
 @Injectable({
   providedIn: 'root',
 })
 export class CharactersFacade {
   charactersStore = inject(CharactersStore);
-  snackBar = inject(MatSnackBar);
+  notifications = inject(NotificationUtils);
   localStorage = inject(LocalStorageService);
 
   charactersList = this.charactersStore.characters;
@@ -33,40 +33,40 @@ export class CharactersFacade {
 
   addToFavorites(character: CharDTO) {
     this.charactersStore.addToFavorites(character);
-    const updatedFavorites = this.charactersStore.favoriteCharacters();
-    this.localStorage.setItem(FAVORITES_STORAGE_KEY, updatedFavorites);
-
-    this.snackBar.open(`${character.name} added to favorites!`, 'Close', { duration: 1000 });
+    this.notifications.notify(`${character.name} added to favorites!`);
   }
 
   updateCharacter(updatedCharacter: CharDTO) {
     this.charactersStore.updateCharacter(updatedCharacter);
-
-    const storedUpdates = this.localStorage.getItem<CharDTO[]>(UPDATED_STORAGE_KEY) ?? [];
-    const existingIndex = storedUpdates.findIndex(c => c.id === updatedCharacter.id);
-    if (existingIndex >= 0) {
-      storedUpdates[existingIndex] = updatedCharacter;
-    } else {
-      storedUpdates.push(updatedCharacter);
-    }
-    this.localStorage.setItem(UPDATED_STORAGE_KEY, storedUpdates);
-
-    const updatedFavorites = this.charactersStore.favoriteCharacters();
-    this.localStorage.setItem(FAVORITES_STORAGE_KEY, updatedFavorites);
-
-    this.snackBar.open(`${updatedCharacter.name} updated!`, 'Close', { duration: 1000 });
+    this.upsertStoredUpdate(updatedCharacter);
+    this.notifications.notify(`${updatedCharacter.name} updated!`);
   }
 
   deleteCharacter(character: CharDTO) {
     this.charactersStore.deleteCharacter(character);
-    const deletedCharacters = this.localStorage.getItem<number[]>(DELETED_STORAGE_KEY) ?? [];
-    this.localStorage.setItem(DELETED_STORAGE_KEY, [...deletedCharacters, character.id]);
+
+    const deletedIds = this.localStorage.getItem<number[]>(DELETED_STORAGE_KEY) ?? [];
+    this.localStorage.setItem(DELETED_STORAGE_KEY, [...deletedIds, character.id]);
 
     this.charactersStore.removeFromFavorites(character.id);
-    const updatedFavorites = this.charactersStore.favoriteCharacters();
-    this.localStorage.setItem(FAVORITES_STORAGE_KEY, updatedFavorites);
+    this.removeFromStoredUpdates(character.id);
 
-    this.snackBar.open(`${character.name} deleted!`, 'Close', { duration: 1000 });
+    this.notifications.notify(`${character.name} deleted!`);
+  }
+
+  private upsertStoredUpdate(character: CharDTO) {
+    const storedUpdates = this.localStorage.getItem<CharDTO[]>(UPDATED_STORAGE_KEY) ?? [];
+    const existingIndex = storedUpdates.findIndex(c => c.id === character.id);
+    existingIndex >= 0
+      ? storedUpdates[existingIndex] = character
+      : storedUpdates.push(character);
+    this.localStorage.setItem(UPDATED_STORAGE_KEY, storedUpdates);
+  }
+
+  private removeFromStoredUpdates(characterId: number) {
+    const storedUpdates = this.localStorage.getItem<CharDTO[]>(UPDATED_STORAGE_KEY) ?? [];
+    const updatedList = storedUpdates.filter(c => c.id !== characterId);
+    this.localStorage.setItem(UPDATED_STORAGE_KEY, updatedList);
   }
 }
 

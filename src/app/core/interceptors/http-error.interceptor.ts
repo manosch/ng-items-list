@@ -2,13 +2,14 @@ import { HttpInterceptorFn } from '@angular/common/http';
 import { inject } from '@angular/core';
 import { catchError, throwError } from 'rxjs';
 import {MatSnackBar} from '@angular/material/snack-bar';
+import { NotificationUtils } from '../../shared/services/notification-utils';
 
 export const errorInterceptorFn: HttpInterceptorFn = (req, next) => {
- const snackBar = inject(MatSnackBar);
+ const notifications = inject(NotificationUtils);
 
  return next(req).pipe(
    catchError((error) => {
-      snackBar.open('Something went wrong. Please try again later.', 'Close');
+      notifications.notify('Something went wrong. Please try again later.');
       return throwError(() => error);
     })
   );
