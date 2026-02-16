@@ -1,7 +1,7 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { CharDTO, ResponseDTO } from '../models/response-dto';
+import { ResponseDTO } from '../models/response-dto';
 import { RequestParams } from '../models/request-params';
 
 @Injectable({

@@ -2,7 +2,7 @@ import { inject, Injectable } from '@angular/core';
 import { CharactersStore } from '../../core/state/characters-store/characters-store';
 import { RequestParams } from '../../api/models/request-params';
 import { CharDTO } from '../../api/models/response-dto';
-import { LocalStorageService } from '../../core/services/local-storage.service';
+import { LocalStorage } from '../../core/services/local-storage';
 import { DELETED_STORAGE_KEY, UPDATED_STORAGE_KEY } from './constants';
 import { NotificationUtils } from '../../shared/services/notification-utils';
 
@@ -12,7 +12,7 @@ import { NotificationUtils } from '../../shared/services/notification-utils';
 export class CharactersFacade {
   charactersStore = inject(CharactersStore);
   notifications = inject(NotificationUtils);
-  localStorage = inject(LocalStorageService);
+  localStorage = inject(LocalStorage);
 
   charactersList = this.charactersStore.characters;
   favoriteCharacters = this.charactersStore.favoriteCharacters;

@@ -1,11 +1,9 @@
 import { ChangeDetectionStrategy, Component, effect, inject, Signal, untracked } from '@angular/core';
-import { Router } from '@angular/router';
 import { debounceTime, distinctUntilChanged, filter } from 'rxjs';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { CharactersFacade } from '../characters-facade';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { CharDTO } from '../../../api/models/response-dto';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { RestoreScrollPosition } from '../../../shared/directives/restore-scroll-position';
 import { CharactersList } from '../../../shared/components/characters-list/characters-list';

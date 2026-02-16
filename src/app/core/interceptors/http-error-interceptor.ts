@@ -1,7 +1,6 @@
 import { HttpInterceptorFn } from '@angular/common/http';
 import { inject } from '@angular/core';
 import { catchError, throwError } from 'rxjs';
-import {MatSnackBar} from '@angular/material/snack-bar';
 import { NotificationUtils } from '../../shared/services/notification-utils';
 
 export const errorInterceptorFn: HttpInterceptorFn = (req, next) => {

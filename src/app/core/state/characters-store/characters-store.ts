@@ -7,7 +7,7 @@ import { pipe, switchMap, filter, tap, catchError, map } from 'rxjs';
 import { CharDTO } from '../../../api/models/response-dto';
 import { CharacterApi } from '../../../api/services/character-api.ts';
 import { RequestParams } from '../../../api/models/request-params';
-import { LocalStorageService } from '../../services/local-storage.service';
+import { LocalStorage } from '../../services/local-storage';
 import { DELETED_STORAGE_KEY, FAVORITES_STORAGE_KEY, UPDATED_STORAGE_KEY } from '../../../feature/characters/constants';
 
 type CharactersState = {
@@ -31,7 +31,7 @@ export const CharactersStore = signalStore(
   withState(initialState),
   withProps(() => ({
     api: inject(CharacterApi),
-    localStorage: inject(LocalStorageService)
+    localStorage: inject(LocalStorage)
   })),
 
   withMethods(({ api, localStorage, ...store }) => ({
