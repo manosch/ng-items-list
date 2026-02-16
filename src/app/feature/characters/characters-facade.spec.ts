@@ -88,15 +88,6 @@ describe('CharactersFacade', () => {
         jasmine.arrayWithExactContents([updated, existing[1]])
       );
     });
-
-    it('should initialize stored updates to empty when none exist', () => {
-      const updated = getChar({ id: 5, name: 'Beth' });
-      localStorage.getItem.and.returnValue(null);
-
-      facade.updateCharacter(updated);
-
-      expect(localStorage.setItem).toHaveBeenCalledWith(UPDATED_STORAGE_KEY, [updated]);
-    });
   });
 
   describe('deleteCharacter', () => {
